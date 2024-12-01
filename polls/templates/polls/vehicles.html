@@ -1,0 +1,101 @@
+{% extends 'base/base.html' %}
+
+{% load static %}
+{% load widget_tweaks %}
+
+{% block extrastyle %}
+<link rel="stylesheet" href="{% static 'polls/parts.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="row">
+        <!-- Основная колонка с контентом -->
+        <div class="col-md-9">
+            <h2 class="mb-4 text-center">Available Vehicles</h2>
+            
+            <!-- Поисковая форма и сортировка -->
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <form method="get" class="d-flex">
+                        {{ search_form.search|add_class:"form-control me-2" }}
+                        <button type="submit" class="btn btn-primary">Search</button>
+                    </form>
+                </div>
+                <div class="col-md-6">
+                    <form method="get" class="d-flex">
+                        {{ order_form.order|add_class:"form-select me-2" }}
+                        <button type="submit" class="btn btn-primary">Order</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Карточки с автомобилями -->
+            <div class="row g-4">
+                {% for vehicle in vehicles %}
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 shadow-sm">
+                        <img 
+                            src="../{{ vehicle.image }}" 
+                            alt="Vehicle Image" 
+                            class="card-img-top" 
+                            style="height: 200px; object-fit: cover;"
+                        />
+                        <div class="card-body">
+                            <h5 class="card-title text-primary">{{ vehicle.mark }} {{ vehicle.model }}</h5>
+                            <p class="card-text">
+                                <strong>Price:</strong> {{ vehicle.price }} BYN<br>
+                                <strong>Address:</strong> {{ vehicle.address }}<br>
+                                <strong>Type:</strong> {{ vehicle.type }}
+                            </p>
+                            <form action="{% url 'polls:rent' vehicle.id %}" method="post" class="text-center">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-success w-100">Rent</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-12">
+                    <p class="text-center text-muted">There are no available vehicles</p>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="text-center mt-4">
+                <hr>
+                <p class="text-muted">{{ quote }}</p>
+            </div>
+        </div>
+
+        <!-- Сайдбар с фильтрами -->
+        <div class="col-md-3">
+            <div class="card shadow-sm p-3">
+                <h5 class="card-title text-center">Filters</h5>
+                <form method="get">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="{{ filter_form.mark.id_for_label }}" class="form-label">{{ filter_form.mark.label }}</label>
+                        {{ filter_form.mark|add_class:"form-select" }}
+                    </div>
+                    <div class="mb-3">
+                        <label for="{{ filter_form.type.id_for_label }}" class="form-label">{{ filter_form.type.label }}</label>
+                        {{ filter_form.type|add_class:"form-select" }}
+                    </div>
+                    <div class="mb-3">
+                        <label for="{{ filter_form.price_from.id_for_label }}" class="form-label">{{ filter_form.price_from.label }}</label>
+                        {{ filter_form.price_from|add_class:"form-control" }}
+                    </div>
+                    <div class="mb-3">
+                        <label for="{{ filter_form.price_to.id_for_label }}" class="form-label">{{ filter_form.price_to.label }}</label>
+                        {{ filter_form.price_to|add_class:"form-control" }}
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">Apply Filters</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

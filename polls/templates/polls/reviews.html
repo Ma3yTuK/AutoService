@@ -1,0 +1,48 @@
+{% extends 'base/base.html' %}
+
+{% load static %}
+
+{% block extrastyle %}
+<link rel="stylesheet" href="{% static 'polls/parts.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-8 offset-lg-2">
+            <h2 class="text-center mb-4">Reviews</h2>
+
+            <!-- Кнопка добавления отзыва -->
+            <div class="text-center mb-4">
+                <form action="{% url 'polls:review' %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-primary">Add Review</button>
+                </form>
+            </div>
+
+            <!-- Отзывы -->
+            {% for review in reviews %}
+            <div class="card mb-3 shadow-sm">
+                <div class="card-header d-flex justify-content-between">
+                    <span class="fw-bold">{{ review.first_name }}</span>
+                    <span class="text-muted">{{ review.model }}</span>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">{{ review.review }}</p>
+                </div>
+            </div>
+            {% empty %}
+            <div class="text-center mt-5">
+                <p class="text-muted">There are no reviews yet</p>
+            </div>
+            {% endfor %}
+
+            <!-- Цитата -->
+            <div class="text-center mt-5">
+                <hr style="height: 2px; background: #333; width: 60%; margin: 20px auto;">
+                <p class="fst-italic text-muted">{{ quote }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

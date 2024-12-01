@@ -1,0 +1,53 @@
+{% extends 'base/base.html' %}
+
+{% load static %}
+
+{% block extrastyle %}
+<link rel="stylesheet" href="{% static 'polls/cart.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white text-center">
+                    <h3>Cart</h3>
+                </div>
+                <div class="card-body">
+                    {% if rents %}
+                    {% for rent in rents %}
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <h5 class="card-title">{{ rent.model }}</h5>
+                                    <p class="card-text">
+                                        <strong>Price:</strong> {{ rent.price }} BYN<br>
+                                    </p>
+                                </div>
+                                <div class="col-md-4 d-flex align-items-center justify-content-end">
+                                    <form action="{% url 'polls:end_rent' rent.id %}" method="post">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-danger">Finish Rent</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    {% else %}
+                    <div class="alert alert-warning text-center">
+                        <strong>Your cart is empty.</strong>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="card-footer text-center">
+                    <hr style="height: 3px; background: black; width: 80%; margin: 20px auto;">
+                    <p class="mb-0">{{ quote }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

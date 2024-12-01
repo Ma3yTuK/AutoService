@@ -1,0 +1,98 @@
+{% extends 'base/base.html' %}
+
+{% load static %}
+
+{% block extrastyle %}
+<link rel="stylesheet" href="{% static 'authentication/profile.css' %}">
+<style>
+    .update-container {
+        background: #f8f9fa;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+        color: #007bff;
+        text-align: center;
+        font-weight: bold;
+    }
+    .form-group {
+        margin-bottom: 20px;
+    }
+    .btn-primary {
+        background-color: #007bff;
+        border: none;
+    }
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+    .form-text {
+        margin-top: 5px;
+    }
+    select {
+        width: 100%;
+        padding: 10px;
+        margin: 8px 0;
+        border-radius: 5px;
+        border: 1px solid #ced4da;
+        font-size: 1rem;
+        background-color: #f8f9fa;
+        color: #495057;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    select:focus {
+        border-color: #007bff;
+        outline: none;
+        background-color: #ffffff;
+    }
+    select option {
+        padding: 10px;
+        background-color: #ffffff;
+        color: #495057;
+    }
+    select:hover {
+        background-color: #e9ecef;
+    }
+    input[type="file"] {
+        font-size: 1rem;
+        padding: 10px;
+        cursor: pointer;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #f8f9fa;
+        width: 100%;
+        transition: border-color 0.3s, background-color 0.3s;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6 update-container">
+            <h2>Create</h2>
+            <form method="post" novalidate>
+                {% csrf_token %}
+                {{ form.non_field_errors }}
+                {% for field in form %}
+                <div class="form-group row">
+                    <label for="{{ field.id_for_label }}" class="col-sm-4 col-form-label">{{ field.label_tag }}</label>
+                    <div class="col-sm-8">
+                        {{ field }}
+                        {% if field.errors %}
+                        <small class="form-text text-danger">{{ field.errors }}</small>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+                <div class="form-group row">
+                    <div class="col-sm-12 text-center">
+                        <button type="submit" class="btn btn-primary w-50">Create</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,118 @@
+{% extends 'base/base.html' %}
+
+{% load static %}
+
+{% block extrastyle %}
+<link rel="stylesheet" href="{% static 'polls/jobs.css' %}">
+<style>
+    .update-container {
+        background: #f8f9fa;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+        color: #007bff;
+        text-align: center;
+        font-weight: bold;
+        margin-bottom: 30px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 20px;
+        font-size: 1rem;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+        transition: background-color 0.3s;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    th, td {
+        padding: 12px;
+        text-align: center;
+        border: 1px solid #ced4da;
+    }
+
+    th {
+        background-color: #007bff;
+        color: white;
+    }
+
+    td a {
+        color: #007bff;
+        text-decoration: none;
+    }
+
+    td a:hover {
+        text-decoration: underline;
+    }
+
+    .text-center {
+        margin-top: 30px;
+    }
+
+    hr {
+        height: 5px;
+        background: black;
+        width: 80%;
+        margin: 20px auto;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-sm">
+    <div class="offset-sm-2 col-sm-8 update-container">
+        <h2>Insurances</h2>
+        <div class="row">
+            <form action={% url "adm:insurance_create" %}>
+                {% csrf_token %}
+                <input type="submit" class="mt-5 btn btn-primary" value="Create insurance" />
+            </form>
+        </div>
+        {% if insurances %}
+        <table class="mt-5">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Vehicle id</th>
+                    <th>Start</th>
+                    <th>End</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for insurance in insurances %}
+                <tr>
+                    <td><a href={% url "adm:insurance_update" insurance.id %}>{{ insurance.id }}</a></td>
+                    <td>{{ insurance.id_vehicle }}</td>
+                    <td>{{ insurance.insurance_start }}</td>
+                    <td>{{ insurance.insurance_end }}</td>
+                    <td><a href={% url "adm:insurance_delete" insurance.id %}>Delete</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <strong>There are no insurances.</strong>
+        {% endif %}
+        <hr>
+        <p class="text-center">{{ quote }}</p>
+    </div>
+</div>
+{% endblock %}

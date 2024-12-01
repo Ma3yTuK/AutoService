@@ -1,0 +1,124 @@
+{% extends 'base/base.html' %}
+
+{% load static %}
+
+{% block extrastyle %}
+<link rel="stylesheet" href="{% static 'polls/jobs.css' %}">
+<style>
+    .update-container {
+        background: #f8f9fa;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+        text-align: center;
+        color: #007bff;
+        font-weight: bold;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 20px;
+        font-size: 1rem;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+        transition: background-color 0.3s;
+    }
+
+    table {
+        width: 100%;
+        margin-top: 20px;
+        border-collapse: collapse;
+    }
+
+    th, td {
+        padding: 12px;
+        text-align: center;
+        border: 1px solid #ddd;
+    }
+
+    th {
+        background-color: #007bff;
+        color: white;
+    }
+
+    td a {
+        text-decoration: none;
+        color: #007bff;
+        font-weight: bold;
+    }
+
+    td a:hover {
+        color: #0056b3;
+    }
+
+    .no-branches {
+        text-align: center;
+        font-size: 18px;
+        color: #6c757d;
+    }
+
+    hr {
+        height: 3px;
+        background: #000;
+        margin: 20px auto;
+        width: 80%;
+    }
+
+    .quote {
+        text-align: center;
+        color: #6c757d;
+        font-style: italic;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-sm">
+    <div class="offset-sm-2 col-sm-8 update-container">
+        <h2>Branches</h2>
+        <div class="row mb-4">
+            <form action="{% url 'adm:branch_create' %}" method="get">
+                {% csrf_token %}
+                <button type="submit" class="mt-5 btn btn-primary">Create Branch</button>
+            </form>
+        </div>
+
+        {% if branches %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Address</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for branch in branches %}
+                <tr>
+                    <td><a href="{% url 'adm:branch_update' branch.id %}">{{ branch.id }}</a></td>
+                    <td>{{ branch.address }}</td>
+                    <td>
+                        <a href="{% url 'adm:branch_delete' branch.id %}">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="no-branches">
+            <strong>There are no branches available.</strong>
+        </div>
+        {% endif %}
+
+        <hr>
+        <p class="quote">{{ quote }}</p>
+    </div>
+</div>
+{% endblock %}

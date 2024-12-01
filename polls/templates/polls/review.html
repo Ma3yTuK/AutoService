@@ -1,0 +1,59 @@
+{% extends 'base/base.html' %}
+
+{% load static %}
+
+{% block extrastyle %}
+<link rel="stylesheet" href="{% static 'polls/review.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white text-center">
+                    <h3>Create Review</h3>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <!-- Выбор транспортного средства -->
+                        <div class="mb-3">
+                            <label for="{{ form.vehicle.id_for_label }}" class="form-label">
+                                Vehicle
+                            </label>
+                            {{ form.vehicle|add_class:"form-select" }}
+                            {% if form.vehicle.help_text %}
+                            <div class="form-text">{{ form.vehicle.help_text }}</div>
+                            {% endif %}
+                            {% if form.vehicle.errors %}
+                            <div class="text-danger small">{{ form.vehicle.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <!-- Текст отзыва -->
+                        <div class="mb-3">
+                            <label for="{{ form.review.id_for_label }}" class="form-label">
+                                Review
+                            </label>
+                            {{ form.review|add_class:"form-control" }}
+                            {% if form.review.help_text %}
+                            <div class="form-text">{{ form.review.help_text }}</div>
+                            {% endif %}
+                            {% if form.review.errors %}
+                            <div class="text-danger small">{{ form.review.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <!-- Кнопка отправки -->
+                        <div class="d-grid mt-4">
+                            <button type="submit" class="btn btn-primary">Create</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
